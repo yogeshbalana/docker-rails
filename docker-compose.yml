@@ -1,0 +1,32 @@
+# docker-compose.yml
+version: '3.9'
+services:
+  db:
+    image: postgres
+    container_name: db
+    volumes:
+      - ./tmp/db:/var/lib/postgresql/data
+    networks:
+      - networks
+    ports:
+      - "5432:5432"
+  web:
+    build: .
+    container_name: web
+    volumes:
+      - .:/docker-rails
+    ports:
+      - "3000:3000"
+      - "3035:3035"
+    depends_on:
+      - db
+    networks:
+      - networks
+    environment:
+      - .env
+volumes:
+  web:
+  db:
+networks:
+  networks:
+    driver: bridge
